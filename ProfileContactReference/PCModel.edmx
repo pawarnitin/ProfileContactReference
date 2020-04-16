@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ProfilesContactsModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="contacts">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProfileId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ContactId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ContactType" Type="nvarchar" MaxLength="10" />
+          <Property Name="ContactNumber" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="profiles">
+          <Key>
+            <PropertyRef Name="ProfileId" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProfileId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Firstname" Type="nvarchar" MaxLength="100" />
+          <Property Name="Lastname" Type="nvarchar" MaxLength="100" />
+          <Property Name="DOB" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_contacts_profiles">
+          <End Role="profiles" Type="Self.profiles" Multiplicity="1" />
+          <End Role="contacts" Type="Self.contacts" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="profiles">
+              <PropertyRef Name="ProfileId" />
+            </Principal>
+            <Dependent Role="contacts">
+              <PropertyRef Name="ProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="AddProfileContact" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProfileId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="Firstname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Lastname" Type="nvarchar" Mode="In" />
+          <Parameter Name="DOB" Type="date" Mode="In" />
+          <Parameter Name="ContactId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="ContactType" Type="nvarchar" Mode="In" />
+          <Parameter Name="ContactNumber" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="DeleteProfileContact" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="UpdateProfileContact" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+          <Parameter Name="Firstname" Type="nvarchar" Mode="In" />
+          <Parameter Name="Lastname" Type="nvarchar" Mode="In" />
+          <Parameter Name="DOB" Type="date" Mode="In" />
+          <Parameter Name="ContactId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="ContactType" Type="nvarchar" Mode="In" />
+          <Parameter Name="ContactNumber" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="ProfilesContactsModelStoreContainer">
+          <EntitySet Name="contacts" EntityType="Self.contacts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="profiles" EntityType="Self.profiles" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_contacts_profiles" Association="Self.FK_contacts_profiles">
+            <End Role="profiles" EntitySet="profiles" />
+            <End Role="contacts" EntitySet="contacts" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ProfilesContactsModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="contact">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProfileId" Type="Guid" Nullable="false" />
+          <Property Name="ContactId" Type="Guid" Nullable="false" />
+          <Property Name="ContactType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ContactNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="profile" Relationship="Self.FK_contacts_profiles" FromRole="contacts" ToRole="profiles" />
+        </EntityType>
+        <EntityType Name="profile">
+          <Key>
+            <PropertyRef Name="ProfileId" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProfileId" Type="Guid" Nullable="false" />
+          <Property Name="Firstname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Lastname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DOB" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="contacts" Relationship="Self.FK_contacts_profiles" FromRole="profiles" ToRole="contacts" />
+        </EntityType>
+        <Association Name="FK_contacts_profiles">
+          <End Role="profiles" Type="Self.profile" Multiplicity="1" />
+          <End Role="contacts" Type="Self.contact" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="profiles">
+              <PropertyRef Name="ProfileId" />
+            </Principal>
+            <Dependent Role="contacts">
+              <PropertyRef Name="ProfileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PCDBContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="contacts" EntityType="Self.contact" />
+          <EntitySet Name="profiles" EntityType="Self.profile" />
+          <AssociationSet Name="FK_contacts_profiles" Association="Self.FK_contacts_profiles">
+            <End Role="profiles" EntitySet="profiles" />
+            <End Role="contacts" EntitySet="contacts" />
+          </AssociationSet>
+          <FunctionImport Name="AddProfileContact">
+            <Parameter Name="ProfileId" Mode="In" Type="Guid" />
+            <Parameter Name="Firstname" Mode="In" Type="String" />
+            <Parameter Name="Lastname" Mode="In" Type="String" />
+            <Parameter Name="DOB" Mode="In" Type="DateTime" />
+            <Parameter Name="ContactId" Mode="In" Type="Guid" />
+            <Parameter Name="ContactType" Mode="In" Type="String" />
+            <Parameter Name="ContactNumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="DeleteProfileContact">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="UpdateProfileContact">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Firstname" Mode="In" Type="String" />
+            <Parameter Name="Lastname" Mode="In" Type="String" />
+            <Parameter Name="DOB" Mode="In" Type="DateTime" />
+            <Parameter Name="ContactId" Mode="In" Type="Guid" />
+            <Parameter Name="ContactType" Mode="In" Type="String" />
+            <Parameter Name="ContactNumber" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ProfilesContactsModelStoreContainer" CdmEntityContainer="PCDBContext">
+          <EntitySetMapping Name="contacts">
+            <EntityTypeMapping TypeName="ProfilesContactsModel.contact">
+              <MappingFragment StoreEntitySet="contacts">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
+                <ScalarProperty Name="ContactId" ColumnName="ContactId" />
+                <ScalarProperty Name="ContactType" ColumnName="ContactType" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="profiles">
+            <EntityTypeMapping TypeName="ProfilesContactsModel.profile">
+              <MappingFragment StoreEntitySet="profiles">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ProfileId" ColumnName="ProfileId" />
+                <ScalarProperty Name="Firstname" ColumnName="Firstname" />
+                <ScalarProperty Name="Lastname" ColumnName="Lastname" />
+                <ScalarProperty Name="DOB" ColumnName="DOB" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddProfileContact" FunctionName="ProfilesContactsModel.Store.AddProfileContact" />
+          <FunctionImportMapping FunctionImportName="DeleteProfileContact" FunctionName="ProfilesContactsModel.Store.DeleteProfileContact" />
+          <FunctionImportMapping FunctionImportName="UpdateProfileContact" FunctionName="ProfilesContactsModel.Store.UpdateProfileContact" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
